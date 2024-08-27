@@ -55,22 +55,14 @@ class SaveRecipeView(APIView):
 class UserSavedRecipesView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, username):
-        # Check if the requested user is the same as the logged-in user
-        if request.user.username != username:
+    def get(self, request, user_id):
+        if request.user.id != user_id:
             return Response({"error": "Unauthorized access"}, status=status.HTTP_403_FORBIDDEN)
-
-        # Fetch the user based on the username
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Fetch all saved recipes for this user
-        saved_recipes = SavedRecipe.objects.filter(user=user)
-        serializer = SavedRecipeSerializer(saved_recipes, many=True)
         
+        user = User.objects.get(id=user_id)
+        saved_recipes = SavedRecipe.objects.filter(user_id=user_id)
+        serializer = SavedRecipeSerializer(saved_recipes, many=True)
         return Response({
-            "username": user.username,
-            "saved_recipes": serializer.data
-        }, status=status.HTTP_200_OK)
+            'username': user.username,
+            'saved_recipes': serializer.data
+        })

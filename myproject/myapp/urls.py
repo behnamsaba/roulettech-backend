@@ -5,5 +5,5 @@ urlpatterns = [
     path('register', RegisterView.as_view(), name='register'),
     path('login', LoginView.as_view(), name='login'),
     path('user/<str:username>/save-recipe/', SaveRecipeView.as_view(), name='save-recipe'),
-     path('user/<str:username>/saved-recipes/', UserSavedRecipesView.as_view(), name='user-saved-recipes'),
+    path('user/<int:user_id>/saved-recipes/', UserSavedRecipesView.as_view(), name='user-saved-recipes')
 ]
